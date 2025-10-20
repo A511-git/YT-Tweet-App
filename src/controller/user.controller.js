@@ -11,7 +11,7 @@ const generateAccessAndRefreshToken = async (userId) => {
     try {
         const accessToken = user.generateAccessToken();
         const refreshToken = user.generateRefreshToken();
-        if (!accessToken && !refreshToken)
+        if (!accessToken || !refreshToken)
             throw new ApiError(400, "Access & Refresh token generation failed")
 
         user.refreshToken = refreshToken;
@@ -147,7 +147,34 @@ const loginUser = asyncHandler(async (req, res) => {
 })
 
 const logoutUser = asyncHandler(async (req, res) => {
-    
+
+    await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $unset:
+            {
+                refreshToken: 1
+            }
+        },
+        { new: true }
+    )
+
+    const cookieOptions = {
+        httpOnly: true,
+        secure: true
+    }
+
+    res.status(200)
+        .clearCookie('accessToken', cookieOptions)
+        .clearCookie('refreshToken', cookieOptions)
+        .json(
+            new ApiResponse(
+                200,
+                null,
+                "Logout successful"
+            )
+        )
+
 })
 
-export { registerUser, loginUser };
+export { registerUser, loginUser, logoutUser };
