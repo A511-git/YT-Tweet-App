@@ -1,1 +1,1 @@
-export const DB_NAME = 'yt-tweet-app';
+export const DB_NAME = "yt-tweet-app";
