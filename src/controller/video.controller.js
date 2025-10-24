@@ -1,6 +1,6 @@
 import { JsonWebTokenError } from "jsonwebtoken";
 import { User } from "../models/user.model";
-import { ApiError } from "../utils/apiError";
+import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse";
 import { asyncHandler } from "../utils/asyncHandler";
 import { cloudinaryUpload } from "../utils/Cloudinary";
